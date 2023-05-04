@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Scrolling Text Box</title>
+	<style>
+        #border-box{
+            width: 380px;
+			height: 827px;
+			border: 1px solid #ccc;
+			overflow: hidden;
+			padding: 10px;
+			font-size: 16px;
+			position: relative;
+            float: left;
+            left: 50px;
+        }
+        #text-box {
+			width: 357px;
+			height: 504px;
+			border: 1px solid #ccc;
+			overflow: hidden;
+			padding: 10px;
+			font-size: 16px;
+			position: relative;
+		}
+		
+		#text {
+			position: absolute;
+			bottom: 0;
+			animation: scroll-up 30s linear infinite;
+		}
+		
+		@keyframes scroll-up {
+			from {
+				transform: translateY(100%);
+			}
+			to {
+                /*top: 0;*/
+                transform: translateY(-100%);
+			}
+		}
+		
+		#input-field {
+			margin-top: 0px;
+			width: 450px;
+			height: 150px;
+			font-size: 16px;
+			padding: 10px;
+			border: 1px solid #ccc;
+            float: left;
+            position: relative;
+            left: 10px;
+		}
+         #border-box2{
+            width: 490px;
+			height: 827px;
+			border: 1px solid #ccc;
+			overflow: hidden;
+			padding: 10px;
+			font-size: 16px;
+			position: relative;
+            float: left;
+            left: 400px; 
+        }
+        /* CSS for progress bars */
+        #progress-bars {
+			display: flex;
+			flex-direction: column;
+			align-items: left;
+			justify-content: center;
+			height: 200px;
+		}
+		
+		.progress {
+			position: relative;
+			width: 90%;
+			height: 70px;
+			background-color: #f2f2f2;
+			margin-bottom: 20px;
+		}
+		
+		.progress-bar {
+			position: absolute;
+			height: 100%;
+			background-color: red; /* or blue */
+			width: 0%;
+			transition: width 0.5s ease-in-out;
+		}
+		
+		.progress-overlay {
+			position: absolute;
+			top: 0;
+			right: -40px;
+			height: 100%;
+			width: 40px;
+			background-color: rgba(0,0,0,0.1);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 24px;
+			color: #fff;
+		}
+        #button-container{
+            width: 100%;
+            height: 100%;
+            position: relative;
+            top: 20px;
+            z-index: 0;
+        }
+        
+          /* Style for buttons and count input field */
+      button, input {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+        margin-right: 10px;
+      } 
+        
+	</style>
+</head>
+<body>
+<div id="border-box">
+    <div id="text-box">
+		<div id="text"></div>
+	</div>
+    <!-- for the progress bars -->
+    <div id="progress-bars">
+		<div class="progress">
+			<div class="progress-bar" id="rose-progress-bar"></div>
+			<div class="progress-overlay" id="rose-overlay"></div>
+		</div>
+		<div class="progress">
+			<div class="progress-bar" id="icon-progress-bar"></div>
+			<div class="progress-overlay" id="icon-overlay"></div>
+		</div>
+	</div>
+    </div>
+
+<div id="border-box2">
+    <textarea id="input-field" placeholder="Enter text here"></textarea>
+    <!-- ///////////////////////////////////////////////////////////
+    //for the buttons
+    ////////////////////////////////////////////////////////////////
+    --> 
+    <div id="button-container">
+    <p>Current count of Rose: <span id="rose-count">0</span></p>
+    <button id="rose-increase-one">+1</button>
+    <button id="rose-decrease-one">-1</button>
+    <input type="number" id="rose-increase-value" placeholder="+N">
+    <button id="rose-increase-custom">Add</button>
+    <input type="number" id="rose-decrease-value" placeholder="-N">
+    <button id="rose-decrease-custom">Subtract</button>
+    <input type="number" id="rose-set-value" placeholder="New value">
+    <button id="rose-set-custom">Set</button>
+    
+    <p>Current count of icon: <span id="rose-count">0</span></p>
+    <button id="icon-increase-one">+1</button>
+    <button id="icon-decrease-one">-1</button>
+    <input type="number" id="icon-increase-value" placeholder="+N">
+    <button id="icon-increase-custom">Add</button>
+    <input type="number" id="icon-decrease-value" placeholder="-N">
+    <button id="icon-decrease-custom">Subtract</button>
+    <input type="number" id="icon-set-value" placeholder="New value">
+    <button id="icon-set-custom">Set</button>
+    </div>    
+    </div>        
+        
+	<script>
+		const textBox = document.getElementById("text");
+		const inputField = document.getElementById("input-field");
+
+		// Update text in text box
+		function updateTextBox() {
+			textBox.innerText = inputField.value;
+		}
+
+		// Call update function when input field changes
+		inputField.addEventListener("input", updateTextBox);
+        
+        // script for the progress bars
+        const roseProgressBar = document.getElementById("rose-progress-bar");
+		const iconProgressBar = document.getElementById("icon-progress-bar");
+		const roseOverlay = document.getElementById("rose-overlay");
+		const iconOverlay = document.getElementById("icon-overlay");
+		let rose = 30;
+		let icon = 70;
+		//let total = rose + icon;
+
+		// Update progress bars and overlays
+		function updateProgressBars() {
+			const total = rose + icon;
+            const rosePercent = Math.round((rose / total) * 100);
+			const iconPercent = Math.round((icon / total) * 100);
+			roseProgressBar.style.width = `${rosePercent}%`;
+			iconProgressBar.style.width = `${iconPercent}%`;
+			roseOverlay.innerText = `${rosePercent}%`;
+			iconOverlay.innerText = `${iconPercent}%`;
+		}
+
+		// Increment rose and update progress bars
+		function incrementRose() {
+			rose++;
+			updateProgressBars();
+		}
+
+		// Increment icon and update progress bars
+		function incrementIcon() {
+			icon++;
+			updateProgressBars();
+		}
+        // Call increment functions every second for demonstration purposes
+		setInterval(incrementRose, 1000);
+		setInterval(incrementIcon, 1000);
+        
+	</script>
+</body>
+</html>
